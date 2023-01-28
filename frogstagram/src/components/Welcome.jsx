@@ -5,7 +5,7 @@ export default function Welcome() {
     <>
       <div className="wrapper mt-5">
         <h1 class="title navtext">Welcome to Frogstagram!</h1>
-        <p>This is going to be the coolest app in the world!</p>
+        <p>The world's #1 frog-centric social media platform</p>
       </div>
     </>
   );
