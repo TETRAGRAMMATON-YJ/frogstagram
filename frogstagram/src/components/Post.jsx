@@ -29,6 +29,12 @@ export default function Post() {
   // caption of the Post
   const [caption, setCaption] = useState("");
 
+  const randomLikes = (Math.floor(Math.random() * 10000) + 10).toLocaleString();
+
+  const randomComments = (
+    Math.floor(Math.random() * 1000) + 10
+  ).toLocaleString();
+
   useEffect(() => {
     fetch("https://randomuser.me/api/")
       .then((response) => response.json())
@@ -66,13 +72,15 @@ export default function Post() {
           <SaveButton />
         </div>
         {/* Display of Like Count */}
-        <p className="text-gray-500">1,000 likes</p>
+        <p className="text-gray-500">{randomLikes} likes</p>
         {/* Paragraph containing the caption */}
         <p>
           <strong>{username}</strong> {caption}
         </p>
         {/* "View all comments" button */}
-        <p className="text-gray-500 pt-1 pb-1">View all 1,000 comments</p>
+        <p className="text-gray-500 pt-1 pb-1">
+          View all {randomComments} comments
+        </p>
         {/* Preview of two comments */}
         <p>
           <strong>user1</strong> This is a comment.
@@ -94,3 +102,6 @@ export default function Post() {
     </div>
   );
 }
+
+// Generate a random number between 10 and 10000
+// const randomLikes = Math.floor(Math.random() * 10000) + 10;
