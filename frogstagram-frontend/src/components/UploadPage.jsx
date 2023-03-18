@@ -37,8 +37,8 @@ const UploadPage = () => {
     <div className="container mx-auto">
       <Navbar />
       {/* div width = 70% */}
-      <div className="w-3/5 mx-auto">
-        <h1 className="text-2xl font-bold text-center mt-8 mb-4 upload-heading text-gray-900">
+      <div className="w-3/5 mx-auto upload-heading mt-8">
+        <h1 className="text-2xl font-bold text-center mt-8 mb-4  text-gray-900">
           New Post
         </h1>
         <form className="flex flex-col" encType="multipart/form-data">
@@ -53,7 +53,7 @@ const UploadPage = () => {
             </div>
           )}
           <input
-            className="mt-6 p-2 rounded"
+            className="mt-6 p-2 rounded shadow border border-gray-300 focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="Enter a caption for your post"
           />

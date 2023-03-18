@@ -74,21 +74,21 @@ export default function Post() {
           <SaveButton />
         </div>
         {/* Display of Like Count */}
-        <p className="text-gray-500">{randomLikes} likes</p>
+        <p className="text-gray-500">{randomLikes} ribbits</p>
         {/* Paragraph containing the caption */}
         <p>
           <strong>{username}</strong> {caption}
         </p>
         {/* "View all comments" button */}
         <p className="text-gray-500 pt-1 pb-1">
-          View all {randomComments} comments
+          View all {randomComments} croaks
         </p>
         {/* Preview of two comments */}
         <p>
-          <strong>user1</strong> This is a comment.
+          <strong>user1</strong> This is a croak.
         </p>
         <p>
-          <strong>user2</strong> This is another comment.
+          <strong>user2</strong> This is another croak!
         </p>
         {/* "Add a Comment" section that shows your profile picture */}
         <div className="flex items-center pt-2">
@@ -97,7 +97,7 @@ export default function Post() {
             src="https://picsum.photos/200"
             alt="User"
           />
-          <p className="pl-2">Add a comment...</p>
+          <p className="pl-2">Add a croak...</p>
         </div>
         <p></p>
       </div>
