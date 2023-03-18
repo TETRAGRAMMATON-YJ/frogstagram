@@ -71,8 +71,6 @@ If your photo is not recognized as a frog, you will be redirected to the failure
 <br/>
 <br/>
 
-# The Techncial Stuff
-
-## **The Stack**
+# The Technical Stuff (for nerds)
 
 Frogstagram is built using a React frontend and a FastAPI backend. The FastAPI backend utilizes a SQLite database and utilizes SQLAlchemy as an ORM. The backend also utilizes TensorFlow to leverage the imagenet model to classify images. If the image is classified as a frog, the image is uploaded to the database. If the image is not classified as a frog, the image is not uploaded to the database.
