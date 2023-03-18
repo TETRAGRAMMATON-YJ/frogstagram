@@ -1,9 +1,22 @@
 import uvicorn
 import os
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, Depends, HTTPException, status, File, UploadFile 
+from sqlalchemy.orm import Session
+import application.server.models as models
+from application.server.models import User
+from application.server.schemas import UserCreate, UserOut
+from application.server.database import SessionLocal, engine
+from application.server.security import verify_password, get_password_hash
+from application.server.token import create_access_token, SECRET_KEY
 from starlette.responses import Response, RedirectResponse
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from application.components import predict, read_imagefile
+
+# Bind engine
+models.Base.metadata.create_all(bind=engine)
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app_desc = """<h2>Try this app by uploading any image with `predict/image`</h2>
 <h2>Try Covid symptom checker api - it is just a learning app demo</h2>
@@ -72,6 +85,30 @@ async def predict_api(file: UploadFile = File(...)):
     else:
         # Return a response
         return Response(status_code=200, content="Not a frog!")
+    
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.post("/register", response_model=UserOut)
+def register(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = User(username=user.username, email=user.email, hashed_password=get_password_hash(user.password))
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+@app.post("/token")
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == form_data.username).first()
+    if not user or not verify_password(form_data.password, user.hashed_password):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
+
+    access_token = create_access_token(data={"sub": user.username})
+    return {"access_token": access_token, "token_type": "bearer"}
 
 if __name__ == "__main__":
     uvicorn.run(app, debug=True)
