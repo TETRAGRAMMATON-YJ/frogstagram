@@ -43,6 +43,7 @@ If your photo is recognized as a frog, you will be redirected to the success pag
     <figcaption>Upload page with a frog photo selected</figcaption>
 </figure>
 <br/>
+<br/>
 
 <figure>
   <img src="./docs-and-readme/img/FrogstagramUploadSuccess.JPG" alt="Success page">
@@ -59,6 +60,7 @@ If your photo is not recognized as a frog, you will be redirected to the failure
     <img src="./docs-and-readme/img/FrogstagramUploadPt3.JPG" alt="Failure page">
     <figcaption>Upload page with a non-frog (me) photo selected</figcaption>
 </figure>
+<br/>
 <br/>
 
 <figure>
