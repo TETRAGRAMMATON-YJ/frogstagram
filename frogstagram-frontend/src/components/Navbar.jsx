@@ -1,5 +1,7 @@
-import "../css/index.css";
+import "../tailwind.css"; // Import Tailwind CSS
 import logo from "../frog.png";
+import LogoutButton from "./LogoutButton";
+import UploadButton from "./UploadButton";
 
 // Top navbar component
 export default function Navbar() {
@@ -14,11 +16,12 @@ export default function Navbar() {
           <img className="pr-2 w-14 h-12" src={logo} alt="Frogstagram" />
           <a
             // Position absolute, horizontally centered "Frogstagram"
-            className="absolute left-1/2 transform -translate-x-1/2 font-bold text-lg lg:text-xl text-gray-800 navtext"
+            className="absolute left-1/2 transform -translate-x-1/2 font-bold text-lg lg:text-xl navtext"
           >
             FROGSTAGRAM
           </a>
-          <div className="flex items-center text-gray-600 lg:text-lg">
+          <div className="flex items-center lg:text-lg">
+            <UploadButton />
             <a href="/" className="px-4 navtext navhover" to="/explore">
               Explore
             </a>
@@ -28,6 +31,7 @@ export default function Navbar() {
             <a href="/" className="px-4 navtext navhover" to="/settings">
               Settings
             </a>
+            <LogoutButton />
           </div>
         </div>
       </div>

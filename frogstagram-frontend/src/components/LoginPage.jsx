@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../AuthContext";
 
@@ -13,18 +13,22 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Replace this with your actual API call
-    const response = await fetch("/token", {
+    //Send a request to the FastAPI backend
+    const response = await fetch("http://localhost:8000/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `username=${username}&password=${password}`,
+      mode: "cors", // Add the mode option here
     });
 
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem("access_token", data.access_token);
-      setIsLoggedIn(true);
+      localStorage.setItem("isLoggedIn", true);
+      setIsLoggedIn(true); // Update isLoggedIn state
       navigate("/");
+      console.log(setIsLoggedIn);
+      console.log("Login successful");
     } else {
       // Handle login error
     }

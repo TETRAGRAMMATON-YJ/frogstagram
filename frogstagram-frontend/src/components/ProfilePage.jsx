@@ -2,8 +2,7 @@ import Navbar from "../components/Navbar";
 import Post from "../components/Post";
 import Welcome from "../components/Welcome";
 
-import "../css/index.css";
-import "../css/main.css";
+import "../tailwind.css"; // Import Tailwind CSS
 
 let profilePicture =
   "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png";
@@ -27,7 +26,7 @@ export default function ProfilePage() {
           {/* Row Containing Username */}
           <div className="flex flex-row items-center mb-4">
             <h1 className="text-2xl font-bold mr-4">Username</h1>
-            <button className="ml-2 text-sm font-bold text-white bg-blue-500 rounded-full px-4 py-1">
+            <button className="ml-2 text-sm font-bold text-whit rounded-full px-4 py-1 edit-prof-btn">
               Edit Profile
             </button>
           </div>

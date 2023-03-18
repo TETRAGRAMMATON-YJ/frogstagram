@@ -13,6 +13,8 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 // Import solid heart icon
 import { faHeart as fasHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
+import "../tailwind.css"; // Import Tailwind CSS
+
 export default function LikeButton() {
   // Declare a new state variable, which we'll call "isLiked"
   const [isLiked, setIsLiked] = useState(false);

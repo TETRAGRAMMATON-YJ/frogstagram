@@ -1,18 +1,22 @@
 import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
-import AuthContext from "./AuthContext";
+import AuthContext from "../AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LogoutButton = () => {
   const { setIsLoggedIn } = useContext(AuthContext);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     setIsLoggedIn(false);
-    history.push("/login");
+    navigate("/login");
   };
 
-  return <button onClick={handleLogout}>Logout</button>;
+  return (
+    <button onClick={handleLogout} className="mr-5 px-4 navtext navhover">
+      Log Out
+    </button>
+  );
 };
 
 export default LogoutButton;

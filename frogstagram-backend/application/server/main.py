@@ -1,17 +1,30 @@
 import uvicorn
 import os
+
 from fastapi import FastAPI, Depends, HTTPException, status, File, UploadFile 
+
+from fastapi.middleware.cors import CORSMiddleware
+
+from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from sqlalchemy.orm import scoped_session, sessionmaker
+
 import application.server.models as models
-from application.server.models import User
-from application.server.schemas import UserCreate, UserOut
+from application.server.models import User, Post, Comment
+from application.server.schemas import UserCreate, UserOut, PostCreate, Post, CommentCreate, Comment
 from application.server.database import SessionLocal, engine
 from application.server.security import verify_password, get_password_hash
 from application.server.token import create_access_token, SECRET_KEY
+
 from starlette.responses import Response, RedirectResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from application.components import predict, read_imagefile
+
+# Set up the database engine and session factory
+engine = create_engine("sqlite:///users.db", connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(bind=engine)
+Session = scoped_session(SessionLocal, scopefunc=lambda: app.state.request)
 
 # Bind engine
 models.Base.metadata.create_all(bind=engine)
@@ -22,19 +35,23 @@ app_desc = """<h2>Try this app by uploading any image with `predict/image`</h2>
 <h2>Try Covid symptom checker api - it is just a learning app demo</h2>
 <br>by Aniket Maurya"""
 
-app = FastAPI(title='Tensorflow FastAPI Starter Pack', description=app_desc)
-
-
-@app.get("/", include_in_schema=False)
-async def index():
-    return RedirectResponse(url="/docs")
-
 
 app_desc = """
 <h2>A FastAPI-based backend for Frogstagram</h2>
 <br>by Logan Jorgensen"""
 
 app = FastAPI(title='Frogstagram Backend', description=app_desc)
+
+# Allow all origins
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/", include_in_schema=False)
 async def index():
@@ -78,13 +95,13 @@ async def predict_api(file: UploadFile = File(...)):
             # Convert JpegImageFile to bytes
             buffer.write(image.tobytes())
 
-        # Return a response
-        return Response(status_code=200, content="Frog!")
+        # Return a response as json with the prediction "frog"
+        return Response(status_code=200, content='{"prediction": "frog"}')
 
     # Otherwise, the image is not a frog, so just return a simple response
     else:
-        # Return a response
-        return Response(status_code=200, content="Not a frog!")
+        # Otherwise, return JSON response with contents "not-frog"
+        return Response(status_code=200, content='{"prediction": "not-frog"}')
     
 def get_db():
     db = SessionLocal()
@@ -99,7 +116,58 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    return db_user
+    return db_user.to
+
+@app.get("/posts")
+def get_posts(db: Session = Depends(get_db)):
+    posts = db.query(models.Post).all()
+    return posts
+
+@app.post("/posts")
+def create_post(post: PostCreate, db: Session = Depends(get_db)):
+    # Create a new post
+    new_post = models.Post(title=post.title, content=post.content, author_id=post.author_id)
+    # Add the new post to the database
+    db.add(new_post)
+    # Commit the changes to the database
+    db.commit()
+    # Refresh the database
+    db.refresh(new_post)
+
+    # Successful post creation. Return success message.
+    return {"message": "Post created"}
+
+@app.delete("/posts/{post_id}")
+def delete_post(post_id: int, db: Session = Depends(get_db)):
+    # Delete the post with the given id
+    db.query(models.Post).filter(models.Post.id == post_id).delete()
+    # Commit the changes to the database
+    db.commit()
+
+    # Successful post deletion. Return success message.
+    return {"message": "Post deleted"}
+
+# Get all comments for a given post based on the post id
+@app.get("/posts/{post_id}/comments")
+def get_comments(post_id: int, db: Session = Depends(get_db)):
+    # Get all comments for the given post id
+    comments = db.query(models.Comment).filter(models.Comment.post_id == post_id).all()
+    return comments
+
+# Adds a comment to the post with the given id
+@app.post("/posts/{post_id}/comments")
+def create_comment(post_id: int, comment: CommentCreate, db: Session = Depends(get_db)):
+    # Create a new comment
+    new_comment = models.Comment(content=comment.content, post_id=post_id, author_id=comment.author_id)
+    # Add the new comment to the database
+    db.add(new_comment)
+    # Commit the changes to the database
+    db.commit()
+    # Refresh the database
+    db.refresh(new_comment)
+
+    # Successful comment creation. Return success message.
+    return {"message": "Comment created"}
 
 @app.post("/token")
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):

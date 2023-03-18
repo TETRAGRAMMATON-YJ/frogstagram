@@ -22,6 +22,8 @@ import LikeButton from "./LikeButton";
 // Import Save Button Component
 import SaveButton from "./SaveButton";
 
+import "../tailwind.css"; // Import Tailwind CSS
+
 export default function Post() {
   // Username of the User Who Posted the Post
   const [username, setUsername] = useState("");
