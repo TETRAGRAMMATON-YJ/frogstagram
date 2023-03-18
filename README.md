@@ -67,3 +67,12 @@ If your photo is not recognized as a frog, you will be redirected to the failure
   <img src="./docs-and-readme/img/FrogstagramUploadFailure.JPG" alt="Failure page">
   <figcaption>Failure page</figcaption>
 </figure>
+
+<br/>
+<br/>
+
+# The Techncial Stuff
+
+## **The Stack**
+
+Frogstagram is built using a React frontend and a FastAPI backend. The FastAPI backend utilizes a SQLite database and utilizes SQLAlchemy as an ORM. The backend also utilizes TensorFlow to leverage the imagenet model to classify images. If the image is classified as a frog, the image is uploaded to the database. If the image is not classified as a frog, the image is not uploaded to the database.
