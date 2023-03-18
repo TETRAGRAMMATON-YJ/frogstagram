@@ -39,7 +39,7 @@ const UploadPage = () => {
       {/* div width = 70% */}
       <div className="w-3/5 mx-auto upload-heading mt-8">
         <h1 className="text-2xl font-bold text-center mt-8 mb-4  text-gray-900">
-          New Post
+          Share your frog-tastic photos!
         </h1>
         <form className="flex flex-col" encType="multipart/form-data">
           <input type="file" accept="image/*" onChange={handleImageChange} />
